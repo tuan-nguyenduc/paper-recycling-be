@@ -10,6 +10,8 @@ import SchoolController from "../controller/SchoolController";
 import ClassController from "../controller/ClassController";
 import UploadController from "../controller/UploadController";
 import PaperCollectHistoryController from "../controller/PaperCollectHistoryController";
+import ReviewController from "../controller/ReviewController";
+
 
 const router = express.Router()
 //import controller
@@ -21,6 +23,7 @@ const orderController = new OrderController();
 const schoolController = new SchoolController();
 const classController = new ClassController();
 const uploadController = new UploadController();
+const reviewController = new ReviewController()
 const paperCollectHistoryController = new PaperCollectHistoryController();
 
 
@@ -76,5 +79,6 @@ router.put(`/paper-collect-histories/:id`, [roleMiddleware([AppRole.CLASS_MONITO
 router.post(`/paper-collect-histories/:id/confirm`, [roleMiddleware([AppRole.CLASS_MONITOR, AppRole.TEACHER])], paperCollectHistoryController.confirm.bind(paperCollectHistoryController));
 router.post(`/paper-collect-histories/:id/cancel`, [roleMiddleware([AppRole.CLASS_MONITOR, AppRole.TEACHER])], paperCollectHistoryController.cancel.bind(paperCollectHistoryController));
 
+router.post(`/reviews`, [roleMiddleware([AppRole.ADMIN])], reviewController.createReview.bind(reviewController));
 export default router;
 

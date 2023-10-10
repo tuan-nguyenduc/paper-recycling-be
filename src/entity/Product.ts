@@ -3,6 +3,7 @@ import {ProductStatus} from "../enum";
 import {Category} from "./Category";
 import OrderDetail from "./OrderDetail";
 import ColumnNumericTransformer from "./transformer/ColumnNumericTransformer";
+import {Review} from "./Review";
 
 @Entity()
 export class Product {
@@ -62,4 +63,7 @@ export class Product {
 
   @OneToMany(type => OrderDetail, orderDetail => orderDetail.product)
   orderDetails: OrderDetail[];
+
+  @OneToMany(() => Review, review => review.product)
+  reviews: Review[];
 }

@@ -12,6 +12,7 @@ import SchoolClass from "./entity/SchoolClass";
 import School from "./entity/School";
 import SeedHistory from "./entity/SeedHistory";
 import PaperCollectHistory from "./entity/PaperCollectHistory";
+import {Review} from "./entity/Review";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -23,7 +24,7 @@ export const AppDataSource = new DataSource({
   schema: "public",
   synchronize: true,
   logging: false,
-  entities: [User, Category, Product, Order, OrderDetail, PaperPointHistory, SchoolClass, School, SeedHistory, PaperCollectHistory],
+  entities: [User, Category, Product, Order, OrderDetail, PaperPointHistory, SchoolClass, School, SeedHistory, PaperCollectHistory, Review],
   migrations: [],
   subscribers: [],
 })

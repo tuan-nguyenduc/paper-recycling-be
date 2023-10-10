@@ -6,6 +6,7 @@ import PaperPointHistory from "./PaperPointHistory";
 import ColumnNumericTransformer from "./transformer/ColumnNumericTransformer";
 import SchoolClass from "./SchoolClass";
 import School from "./School";
+import {Review} from "./Review";
 
 @Entity()
 export class User {
@@ -107,4 +108,6 @@ export class User {
   })
   school: School;
 
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[]
 }
