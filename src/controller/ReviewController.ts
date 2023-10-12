@@ -1,6 +1,6 @@
 import ReviewService from "../service/ReviewService";
 import {AuthenticatedRequest} from "../type";
-import {Response} from "express";
+import {Request, Response} from "express";
 import {Review} from "../entity/Review";
 
 class ReviewController {
@@ -38,6 +38,23 @@ class ReviewController {
            return res.status(500).json({
                message: 'Create review failed' + err.message
            })
+        }
+    }
+
+    async getAllReviews(req: Request, res: Response) {
+        try {
+            const params = req.query;
+            const reviews = await this.reviewService.findReviewPagination(params)
+
+            return res.status(200).json({
+                message: "Get all review success",
+                data: reviews
+            })
+        } catch (err: any) {
+            console.log("getAllReview error: ", err);
+            return res.status(500).json({
+                message: "Get all reviews failed: " + err.message
+            })
         }
     }
 }

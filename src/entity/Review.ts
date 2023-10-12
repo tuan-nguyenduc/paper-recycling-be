@@ -17,6 +17,19 @@ export class Review {
     @Column()
     productId: number
 
+    @Column({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+    })
+    createdAt: Date;
+
+    @Column({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+    })
+    updated: Date;
+
+
     @ManyToOne(() => User, (user) => user.reviews)
     user: User
 
