@@ -80,6 +80,6 @@ router.post(`/paper-collect-histories/:id/confirm`, [roleMiddleware([AppRole.CLA
 router.post(`/paper-collect-histories/:id/cancel`, [roleMiddleware([AppRole.CLASS_MONITOR, AppRole.TEACHER])], paperCollectHistoryController.cancel.bind(paperCollectHistoryController));
 
 router.post(`/reviews`, [roleMiddleware([AppRole.ADMIN])], reviewController.createReview.bind(reviewController));
-router.get(`/reviews`, [roleMiddleware([AppRole.ADMIN])], reviewController.getAllReviews.bind(reviewController));
+router.get(`/reviews`, reviewController.getAllReviews.bind(reviewController));
 export default router;
 

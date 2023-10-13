@@ -17,6 +17,9 @@ export class Review {
     @Column()
     productId: number
 
+    @Column()
+    rating: number
+
     @Column({
         type: 'timestamp',
         default: () => 'CURRENT_TIMESTAMP',
