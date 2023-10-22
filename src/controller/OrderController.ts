@@ -404,8 +404,6 @@ class OrderController {
       console.log('release query runner')
     }
   }
-
-
 }
 
 export default OrderController;

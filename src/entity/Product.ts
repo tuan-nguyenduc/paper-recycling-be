@@ -1,69 +1,180 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {ProductStatus} from "../enum";
-import {Category} from "./Category";
-import OrderDetail from "./OrderDetail";
-import ColumnNumericTransformer from "./transformer/ColumnNumericTransformer";
-import {Review} from "./Review";
+import {Like, Repository} from "typeorm";
+import Order from "../entity/Order";
+import {AppDataSource} from "../data-source";
+import {OrderStatus} from "../enum";
+import OrderDetail from "../entity/OrderDetail";
+import {Pagination} from "../type";
 
-@Entity()
-export class Product {
+class OrderService {
+  private readonly orderRepository: Repository<Order>
+  private readonly orderDetailRepository: Repository<OrderDetail>
 
-  @PrimaryGeneratedColumn()
-  id: number
+  constructor() {
+    this.orderRepository = AppDataSource.getRepository(Order);
+    this.orderDetailRepository = AppDataSource.getRepository(OrderDetail);
+  }
 
-  @Column()
-  name: string
+  async createOrder(order: Order) {
+    return this.orderRepository.save(order);
+  }
 
-  @Column({
-    type: 'decimal',
-    transformer: new ColumnNumericTransformer()
-  })
-  price: number
+  async updateOrder(order: Order) {
+    return this.orderRepository.save(order);
+  }
 
-  @Column({
-    nullable: true,
-    type: 'text',
-  })
-  description: string
+  async getOrderById(id: number) {
+    return this.orderRepository.findOne({
+      where: {
+        id
+      }
+    });
+  }
 
-  @Column({
-    nullable: true,
-    type: 'text',
-  })
-  images: string
+  async getOrdersByUserId(userId: number) {
+    return this.orderRepository.find({
+      where: {
+        userId,
+      }
+    });
+  }
 
-  @Column({
-    default: 0,
-  })
-  quantity: number
+  async getOrdersByUserIdAndStatus(userId: number, status: OrderStatus) {
+    return this.orderRepository.find({
+      where: {
+        userId,
+        status
+      }
+    })
+  }
 
-  @Column({
-    default: ProductStatus.ACTIVE,
-    type: 'smallint'
-  })
-  status: ProductStatus
+  async getOrdersByUserIdAndStatusPaginated(userId: number, params: any): Promise<Pagination<Order>> {
+    const {page = 0, limit = 10, status, sortDirection, sortBy, q = "", id} = params;
+    const baseQueryOption: any = {
+      where: {
+        userId
+      },
+      skip: page * limit,
+      take: limit,
+      relations: ['orderDetails', "orderDetails.product", "user"]
+    }
+    if (id) {
+      baseQueryOption.where = {
+        ...baseQueryOption.where,
+        id
+      }
+    }
+    if (status) {
+      baseQueryOption.where = {
+        ...baseQueryOption.where,
+        status
+      }
+    }
+    if (sortDirection && sortBy) {
+      baseQueryOption.order = {
+        [sortBy]: sortDirection
+      }
+    }
+    if (q) {
+      baseQueryOption.where = {
+        ...baseQueryOption.where,
+        orderDetails: {
+          product: {
+            name: Like(`%${q}%`)
+          }
+        }
+      }
+    }
+    const list = await this.orderRepository.find(baseQueryOption);
+    const count = await this.orderRepository.count(baseQueryOption);
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
+    return {
+      contents: list,
+      currentPage: page,
+      perPage: limit,
+      totalPage: Math.ceil(count / limit),
+      totalElements: count
+    }
+  }
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+  async getOrdersPaginated(params: any = {}): Promise<Pagination<Order>> {
+    const {page = 0, limit = 10, status, sortDirection, sortBy, q = "", id} = params;
+    const baseQueryOption: any = {
+      where: {},
+      skip: page * limit,
+      take: limit,
+      relations: ['orderDetails', "orderDetails.product", "user"]
+    }
+    if (id) {
+      baseQueryOption.where = {
+        ...baseQueryOption.where,
+        id
+      }
+    }
+    if (status) {
+      baseQueryOption.where = {
+        ...baseQueryOption.where,
+        status
+      }
+    }
+    if (sortDirection && sortBy) {
+      baseQueryOption.order = {
+        [sortBy]: sortDirection
+      }
+    }
+    if (q) {
+      baseQueryOption.where = {
+        ...baseQueryOption.where,
+        orderDetails: {
+          product: {
+            name: Like(`%${q}%`)
+          }
+        }
+      }
+    }
+    const list = await this.orderRepository.find(baseQueryOption);
+    const count = await this.orderRepository.count(baseQueryOption);
 
-  @Column()
-  categoryId: number;
+    return {
+      contents: list,
+      currentPage: page,
+      perPage: limit,
+      totalPage: Math.ceil(count / limit),
+      totalElements: count
+    }
 
-  @ManyToOne(type => Category, category => category.products)
-  category: Category;
 
-  @OneToMany(type => OrderDetail, orderDetail => orderDetail.product)
-  orderDetails: OrderDetail[];
+  }
 
-  @OneToMany(() => Review, review => review.product)
-  reviews: Review[];
+  getOrderDetailByOrderIdAndProductId(orderId: number, productId: number) {
+    return this.orderDetailRepository.findOne({
+      where: {
+        orderId,
+        productId,
+      }
+    });
+  }
+
+  async getOrderDetailsByOrderId(orderId: number) {
+    return this.orderDetailRepository.find({
+      where: {
+        orderId,
+      }
+    });
+  }
+
+  createOrderDetail(orderDetail: OrderDetail) {
+    return this.orderDetailRepository.save(orderDetail);
+  }
+
+  updateOrderDetail(orderDetail: OrderDetail) {
+    return this.orderDetailRepository.save(orderDetail);
+  }
+
+  deleteOrderDetail(orderDetailId: number) {
+    return this.orderDetailRepository.delete(orderDetailId);
+  }
+
+
 }
+
+export default OrderService;
