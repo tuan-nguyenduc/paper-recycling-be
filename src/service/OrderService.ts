@@ -48,7 +48,7 @@ class OrderService {
   }
 
   async getOrdersByUserIdAndStatusPaginated(userId: number, params: any): Promise<Pagination<Order>> {
-    const {page = 0, limit = 10, status, sortDirection, sortBy, q = ""} = params;
+    const {page = 0, limit = 10, status, sortDirection, sortBy, q = "", id} = params;
     const baseQueryOption: any = {
       where: {
         userId
@@ -56,6 +56,12 @@ class OrderService {
       skip: page * limit,
       take: limit,
       relations: ['orderDetails', "orderDetails.product", "user"]
+    }
+    if (id) {
+      baseQueryOption.where = {
+        ...baseQueryOption.where,
+        id
+      }
     }
     if (status) {
       baseQueryOption.where = {
@@ -88,18 +94,21 @@ class OrderService {
       totalPage: Math.ceil(count / limit),
       totalElements: count
     }
-
-
   }
 
-
   async getOrdersPaginated(params: any = {}): Promise<Pagination<Order>> {
-    const {page = 0, limit = 10, status, sortDirection, sortBy, q = ""} = params;
+    const {page = 0, limit = 10, status, sortDirection, sortBy, q = "", id} = params;
     const baseQueryOption: any = {
       where: {},
       skip: page * limit,
       take: limit,
       relations: ['orderDetails', "orderDetails.product", "user"]
+    }
+    if (id) {
+      baseQueryOption.where = {
+        ...baseQueryOption.where,
+        id
+      }
     }
     if (status) {
       baseQueryOption.where = {

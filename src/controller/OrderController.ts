@@ -390,7 +390,8 @@ class OrderController {
       await queryRunner.commitTransaction();
       return res.status(200).json({
         message: 'Cancel order success',
-        data: tx
+        data:
+        tx
       });
     } catch (err: any) {
       console.log("cancelOrder error: ", err);
