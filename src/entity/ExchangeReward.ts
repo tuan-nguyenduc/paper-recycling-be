@@ -1,27 +1,17 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {User} from "./User";
-import {Product} from "./Product";
+import School from "./School";
 import {Post} from "./Post";
 
-
 @Entity()
-export class Review {
+export class ExchangeReward {
     @PrimaryGeneratedColumn()
     id: number
 
     @Column()
-    content: string
+    material: string
 
     @Column()
-    userId: number
-
-    @Column()
-    productId: number
-
-    @Column({
-        default: 0
-    })
-    rating: number
+    reward: number
 
     @Column({
         type: 'timestamp',
@@ -33,13 +23,8 @@ export class Review {
         type: 'timestamp',
         default: () => 'CURRENT_TIMESTAMP',
     })
-    updated: Date;
+    updatedAt: Date;
 
-
-    @ManyToOne(() => User, (user) => user.reviews)
-    user: User
-
-    @ManyToOne(() => Product, (product) => product.reviews)
-    product: Product
-
+    @ManyToOne(type => Post, post => post.exchangeRewards)
+    post: Post;
 }

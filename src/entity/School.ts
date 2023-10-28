@@ -2,6 +2,7 @@ import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "type
 import {SchoolStatus, SchoolType} from "../enum";
 import SchoolClass from "./SchoolClass";
 import {User} from "./User";
+import {Post} from "./Post";
 
 @Entity()
 class School {
@@ -55,6 +56,9 @@ class School {
 
   @OneToMany(type => User, user => user.school)
   users: User[];
+
+  @OneToMany(type => Post, post => post.school)
+  post: Post[];
 }
 
 export default School;

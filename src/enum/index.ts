@@ -53,3 +53,10 @@ export enum PaperCollectStatus {
   COMPLETED = 2,
   CANCELLED = -1,
 }
+
+export enum CampaignStatus {
+  ONGOING = 1,
+  COMPLETED = 2,
+  CANCELLED = -1,
+  DELETED = 0
+}

@@ -11,6 +11,8 @@ import ClassController from "../controller/ClassController";
 import UploadController from "../controller/UploadController";
 import PaperCollectHistoryController from "../controller/PaperCollectHistoryController";
 import ReviewController from "../controller/ReviewController";
+import PostController from "../controller/PostController";
+import ExchangeRewardController from "../controller/ExchangeRewardController";
 
 
 const router = express.Router()
@@ -23,7 +25,9 @@ const orderController = new OrderController();
 const schoolController = new SchoolController();
 const classController = new ClassController();
 const uploadController = new UploadController();
-const reviewController = new ReviewController()
+const reviewController = new ReviewController();
+const postController = new PostController();
+const exchangeRewardController = new ExchangeRewardController();
 const paperCollectHistoryController = new PaperCollectHistoryController();
 
 
@@ -81,5 +85,12 @@ router.post(`/paper-collect-histories/:id/cancel`, [roleMiddleware([AppRole.CLAS
 
 router.post(`/reviews`, [roleMiddleware([AppRole.ADMIN])], reviewController.createReview.bind(reviewController));
 router.get(`/reviews`, reviewController.getAllReviews.bind(reviewController));
-export default router;
 
+router.get('/posts', postController.getAllPost.bind(postController));
+router.post('/posts', [roleMiddleware([AppRole.ADMIN])], postController.createPost.bind(postController))
+router.delete('/posts/:id', [roleMiddleware([AppRole.ADMIN])], postController.deletePost.bind(postController))
+router.put(`/posts/:id`, [roleMiddleware([AppRole.ADMIN])], postController.updatePost.bind(postController));
+
+router.get('/exchange-rewards', exchangeRewardController.getAllExchangeRewards.bind(exchangeRewardController));
+router.post('/exchange-rewards', [roleMiddleware([AppRole.ADMIN])], exchangeRewardController.createExchangeReward.bind(exchangeRewardController))
+export default router;
