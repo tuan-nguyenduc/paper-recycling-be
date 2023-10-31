@@ -5,6 +5,7 @@ import {User} from "./User";
 import PaperPointHistory from "./PaperPointHistory";
 import PaperCollectHistory from "./PaperCollectHistory";
 import ColumnNumericTransformer from "./transformer/ColumnNumericTransformer";
+import MaterialCollectHistory from "./MaterialCollectHistory";
 
 @Entity()
 class SchoolClass {
@@ -62,6 +63,10 @@ class SchoolClass {
 
   @OneToMany(type => PaperCollectHistory, x => x.schoolClass)
   paperCollectHistories: PaperPointHistory[];
+
+  @OneToMany(type => PaperCollectHistory, x => x.schoolClass)
+  materialCollectHistories: MaterialCollectHistory[];
+
   @Column({
     default: 0,
     type: 'decimal',

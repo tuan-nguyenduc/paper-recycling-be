@@ -15,6 +15,8 @@ import PaperCollectHistory from "./entity/PaperCollectHistory";
 import {Review} from "./entity/Review";
 import {Post} from "./entity/Post";
 import {ExchangeReward} from "./entity/ExchangeReward";
+import MaterialCollectHistory from "./entity/MaterialCollectHistory";
+import MaterialCollectDetail from "./entity/MaterialCollectDetail";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -26,7 +28,7 @@ export const AppDataSource = new DataSource({
   schema: "public",
   synchronize: true,
   logging: false,
-  entities: [User, Category, Product, Order, OrderDetail, PaperPointHistory, SchoolClass, School, SeedHistory, PaperCollectHistory, Review, Post, ExchangeReward],
+  entities: [User, Category, Product, Order, OrderDetail, PaperPointHistory, SchoolClass, School, SeedHistory, PaperCollectHistory, Review, Post, ExchangeReward, MaterialCollectHistory, MaterialCollectDetail],
   migrations: [],
   subscribers: [],
 })

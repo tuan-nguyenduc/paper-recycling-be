@@ -13,6 +13,7 @@ import PaperCollectHistoryController from "../controller/PaperCollectHistoryCont
 import ReviewController from "../controller/ReviewController";
 import PostController from "../controller/PostController";
 import ExchangeRewardController from "../controller/ExchangeRewardController";
+import MaterialCollectHistoryController from "../controller/MaterialCollectHistoryController";
 
 
 const router = express.Router()
@@ -29,6 +30,7 @@ const reviewController = new ReviewController();
 const postController = new PostController();
 const exchangeRewardController = new ExchangeRewardController();
 const paperCollectHistoryController = new PaperCollectHistoryController();
+const materialCollectHistoryController = new MaterialCollectHistoryController();
 
 
 router.post(`/auth/login`, authController.login.bind(authController));
@@ -90,7 +92,18 @@ router.get('/posts', postController.getAllPost.bind(postController));
 router.post('/posts', [roleMiddleware([AppRole.ADMIN])], postController.createPost.bind(postController))
 router.delete('/posts/:id', [roleMiddleware([AppRole.ADMIN])], postController.deletePost.bind(postController))
 router.put(`/posts/:id`, [roleMiddleware([AppRole.ADMIN])], postController.updatePost.bind(postController));
+router.post(`/posts/:id/confirm`, [roleMiddleware([AppRole.ADMIN])], postController.finish.bind(postController));
 
 router.get('/exchange-rewards', exchangeRewardController.getAllExchangeRewards.bind(exchangeRewardController));
 router.post('/exchange-rewards', [roleMiddleware([AppRole.ADMIN])], exchangeRewardController.createExchangeReward.bind(exchangeRewardController))
+router.delete('/exchange-rewards/:id', [roleMiddleware([AppRole.ADMIN])], exchangeRewardController.deleteExchangeReward.bind(exchangeRewardController))
+router.put(`/exchange-rewards/:id`, [roleMiddleware([AppRole.ADMIN])], exchangeRewardController.updateExchangeReward.bind(exchangeRewardController));
+router.get(`/exchange-rewards/:id`, exchangeRewardController.getExchangeRewardById.bind(exchangeRewardController));
+
+router.get('/material-collect-histories', materialCollectHistoryController.findAllPaginated.bind(materialCollectHistoryController));
+router.post(`/material-collect-histories`, [roleMiddleware([AppRole.CLASS_MONITOR, AppRole.TEACHER])], materialCollectHistoryController.createMaterialCollectHistory.bind(materialCollectHistoryController));
+router.post(`/material-collect-histories/:id/confirm`, [roleMiddleware([AppRole.CLASS_MONITOR, AppRole.TEACHER])], materialCollectHistoryController.confirmMaterialCollect.bind(materialCollectHistoryController));
+router.post(`/material-collect-histories/:id/cancel`, [roleMiddleware([AppRole.CLASS_MONITOR, AppRole.TEACHER])], materialCollectHistoryController.cancelMaterialCollect.bind(materialCollectHistoryController));
+router.put(`/material-collect-histories/:id`, [roleMiddleware([AppRole.CLASS_MONITOR, AppRole.TEACHER])], materialCollectHistoryController.updateMaterialCollect.bind(materialCollectHistoryController));
+
 export default router;

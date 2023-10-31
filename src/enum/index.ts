@@ -60,3 +60,8 @@ export enum CampaignStatus {
   CANCELLED = -1,
   DELETED = 0
 }
+
+export enum ExchangeRewardStatus {
+  ACTIVE = 1,
+  DELETED = -1,
+}

@@ -3,14 +3,18 @@ import {AuthenticatedRequest} from "../type";
 import {Request, Response} from "express";
 import {Post} from "../entity/Post";
 import SchoolService from "../service/SchoolService";
+import ExchangeRewardService from "../service/ExchangeRewardService";
+import {CampaignStatus} from "../enum";
 
 export default class PostController {
     private readonly postService: PostService;
     private readonly schoolService: SchoolService;
+    private readonly exchangeRewardService: ExchangeRewardService
 
     constructor() {
         this.postService = new PostService();
         this.schoolService = new SchoolService();
+        this.exchangeRewardService = new ExchangeRewardService()
     }
 
     async createPost(req: AuthenticatedRequest, res: Response) {
@@ -94,6 +98,10 @@ export default class PostController {
                 message: 'Post not found'
             })
             await this.postService.deletePost(existedPost)
+            const exchangeRewards = await this.exchangeRewardService.findExchangeRewardsByPostId(+id);
+            for (const exchangeReward of exchangeRewards) {
+                await this.exchangeRewardService.deleteExchangeReward(exchangeReward);
+            }
             return res.status(200).json({
                 message: 'Delete post success'
             })
@@ -104,15 +112,24 @@ export default class PostController {
         }
     }
 
-    // async finish(req: AuthenticatedRequest, res: Response) {
-    //     try {
-    //         const {id} = req.params;
-    //         const campaign = await this.postService.findPostById(+id);
-    //         if (!campaign) {
-    //             throw new Error('Campaign is not found');
-    //         }
-    //
-    //     }
-    // }
+    async finish(req: AuthenticatedRequest, res: Response) {
+        try {
+            const {id} = req.params;
+            const campaign = await this.postService.findPostById(+id);
+            if (!campaign) {
+                throw new Error('Campaign is not found');
+            }
+            campaign.status = CampaignStatus.COMPLETED;
+            const finishData = await this.postService.updatePost(campaign);
+            return res.status(200).json({
+                message: 'Finished campaign successfully'
+            })
+
+        } catch (e) {
+            return res.status(500).json({
+                message: 'Finish campaign failed ' + e.message
+            })
+        }
+    }
 
 }

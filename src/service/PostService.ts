@@ -2,9 +2,7 @@ import {Post} from "../entity/Post";
 import {Repository} from "typeorm";
 import {AppDataSource} from "../data-source";
 import {Pagination} from "../type";
-import ReviewController from "../controller/ReviewController";
-import {Product} from "../entity/Product";
-import {CampaignStatus, ProductStatus} from "../enum";
+import {CampaignStatus} from "../enum";
 
 class PostService {
     private readonly postRepository: Repository<Post>
@@ -35,10 +33,11 @@ class PostService {
         } = params;
 
         const baseQueryOptions: any = {
-            where: {
-                status: CampaignStatus.ONGOING || CampaignStatus.COMPLETED || CampaignStatus.CANCELLED
-
-            },
+            where: [
+                {status: CampaignStatus.COMPLETED},
+                {status: CampaignStatus.CANCELLED},
+                {status: CampaignStatus.ONGOING}
+            ],
             skip: page * limit,
             take: limit,
             relations: ['school', 'exchangeRewards']
@@ -68,6 +67,7 @@ class PostService {
             where: {
                 id,
             },
+            relations: ['exchangeRewards']
         });
     }
 

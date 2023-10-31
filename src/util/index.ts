@@ -1,4 +1,9 @@
 import * as fs from "fs";
+import exp = require("constants");
+import materialCollectDetail from "../entity/MaterialCollectDetail";
+import MaterialCollectDetail from "../entity/MaterialCollectDetail";
+import MaterialCollectHistory from "../entity/MaterialCollectHistory";
+import materialCollectHistory from "../entity/MaterialCollectHistory";
 
 export const validateImage = (file: any) => {
   // Array of allowed files
@@ -27,4 +32,12 @@ export const validateImage = (file: any) => {
 
 export const fromWeightToPaperPoint = (weight: number) => {
   return weight * 1000;
+}
+
+export const fromMaterialToPaperPoint = (materialCollectDetails: MaterialCollectDetail[]) => {
+  let result = 0;
+  materialCollectDetails?.map((detail) => {
+    result += detail.reward*detail.weight;
+  })
+  return result;
 }

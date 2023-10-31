@@ -4,6 +4,8 @@ import {Category} from "./Category";
 import School from "./School";
 import {ExchangeReward} from "./ExchangeReward";
 import {CampaignStatus, ProductStatus} from "../enum";
+import MaterialCollectDetail from "./MaterialCollectDetail";
+import MaterialCollectHistory from "./MaterialCollectHistory";
 
 @Entity()
 export class Post {
@@ -45,4 +47,7 @@ export class Post {
 
     @OneToMany(() => ExchangeReward, exchangeReward => exchangeReward.post)
     exchangeRewards: ExchangeReward[];
+
+    @OneToMany(type => MaterialCollectHistory, materialCollectHistory => materialCollectHistory.post)
+    materialCollectHistories: MaterialCollectHistory[]
 }

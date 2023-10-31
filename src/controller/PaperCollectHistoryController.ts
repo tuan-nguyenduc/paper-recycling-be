@@ -125,7 +125,7 @@ class PaperCollectHistoryController {
       });
       // const schoolClass
     } catch (err: any) {
-      console.log("confirm paper collect history error", err);
+      console.log("confirm paper collect his7tory error", err);
       return res.status(500).json({
         message: err.message
       })
