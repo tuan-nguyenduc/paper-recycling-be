@@ -93,6 +93,7 @@ router.post('/posts', [roleMiddleware([AppRole.ADMIN])], postController.createPo
 router.delete('/posts/:id', [roleMiddleware([AppRole.ADMIN])], postController.deletePost.bind(postController))
 router.put(`/posts/:id`, [roleMiddleware([AppRole.ADMIN])], postController.updatePost.bind(postController));
 router.post(`/posts/:id/confirm`, [roleMiddleware([AppRole.ADMIN])], postController.finish.bind(postController));
+router.get(`/posts/:id`, postController.getPostById.bind(postController));
 
 router.get('/exchange-rewards', exchangeRewardController.getAllExchangeRewards.bind(exchangeRewardController));
 router.post('/exchange-rewards', [roleMiddleware([AppRole.ADMIN])], exchangeRewardController.createExchangeReward.bind(exchangeRewardController))
