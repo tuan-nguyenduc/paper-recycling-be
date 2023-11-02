@@ -1,4 +1,4 @@
-import {Repository} from "typeorm";
+import {Like, Repository} from "typeorm";
 import {AppDataSource} from "../data-source";
 import {ExchangeReward} from "../entity/ExchangeReward";
 import {Pagination} from "../type";
@@ -30,7 +30,8 @@ export default class ExchangeRewardService {
         const {
             page = 0,
             limit = 10,
-            postId
+            postId,
+            q = ""
         } = params
 
         const baseQueryOptions: any = {
@@ -46,6 +47,12 @@ export default class ExchangeRewardService {
             baseQueryOptions.where = {
                 ...baseQueryOptions.where,
                 postId
+            }
+        }
+        if (q) {
+            baseQueryOptions.where = {
+                ...baseQueryOptions.where,
+                material: Like(`%${q}%`)
             }
         }
 

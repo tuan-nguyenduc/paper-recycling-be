@@ -1,5 +1,5 @@
 import {Post} from "../entity/Post";
-import {Repository} from "typeorm";
+import {Like, Repository} from "typeorm";
 import {AppDataSource} from "../data-source";
 import {Pagination} from "../type";
 import {CampaignStatus} from "../enum";
@@ -30,6 +30,8 @@ class PostService {
             page = 0,
             limit = 10,
             schoolId,
+            status,
+            q = "",
         } = params;
 
         const baseQueryOptions: any = {
@@ -50,6 +52,19 @@ class PostService {
             }
         }
 
+        if (status) {
+            baseQueryOptions.where = []
+            baseQueryOptions.where = {
+                ...baseQueryOptions.where,
+                status
+            }
+        }
+        if (q) {
+            baseQueryOptions.where.push({
+                name: Like(`%${q}%`)
+            })
+        }
+
         const list = await this.postRepository.find(baseQueryOptions);
         const total = await this.postRepository.count(baseQueryOptions);
 
@@ -67,7 +82,7 @@ class PostService {
             where: {
                 id,
             },
-            relations: ['exchangeRewards']
+            relations: ['exchangeRewards', 'school']
         });
     }
 
