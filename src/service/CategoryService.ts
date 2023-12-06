@@ -1,4 +1,4 @@
-import {Repository} from "typeorm";
+import {Like, Repository} from "typeorm";
 import {Category} from "../entity/Category";
 import {AppDataSource} from "../data-source";
 import {CategoryStatus} from "../enum";
@@ -22,12 +22,22 @@ export class CategoryService {
     })
   }
 
-  async findAllCategories(): Promise<Category[]> {
-    return await this.categoryRepository.find({
+  async findAllCategories(params: any): Promise<Category[]> {
+    const {
+      q = "",
+    } = params;
+    const baseQueryOptions: any = {
       where: {
         status: CategoryStatus.ACTIVE
       }
-    })
+    }
+    if (q) {
+      baseQueryOptions.where = {
+        ...baseQueryOptions.where,
+        name: Like(`%${q}%`)
+      }
+    }
+    return await this.categoryRepository.find(baseQueryOptions)
   }
 
   async updateCategory(category: Category): Promise<Category> {

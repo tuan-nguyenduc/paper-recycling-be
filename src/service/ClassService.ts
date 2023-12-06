@@ -1,5 +1,5 @@
 import SchoolClass from "../entity/SchoolClass";
-import {Repository} from "typeorm";
+import {Like, Repository} from "typeorm";
 import {AppDataSource} from "../data-source";
 import {Pagination} from "../type";
 import {ClassStatus} from "../enum";
@@ -11,21 +11,35 @@ export default class ClassService {
     this.classRepository = AppDataSource.getRepository(SchoolClass);
   }
 
-  public async findAllClass(page: number, limit: number, params = {}): Promise<Pagination<SchoolClass>> {
-    const list = await this.classRepository.find({
+  public async findAllClass(page: number, limit: number, params: any): Promise<Pagination<SchoolClass>> {
+    const {
+      q = "",
+      schoolId = null,
+    } = params;
+    const baseQueryOptions: any = {
       skip: page * limit,
       take: limit,
       where: {
-        ...params,
         status: ClassStatus.ACTIVE
       },
       relations: ['school']
-    });
-    const total = await this.classRepository.count({
-      where: {
-        ...params
+    }
+
+    if (schoolId) {
+      baseQueryOptions.where = {
+        ...baseQueryOptions.where,
+        schoolId
       }
-    });
+    }
+    if (q) {
+      baseQueryOptions.where = {
+        ...baseQueryOptions.where,
+        name: Like(`%${q}%`)
+      }
+    }
+
+    const list = await this.classRepository.find(baseQueryOptions);
+    const total = await this.classRepository.count(baseQueryOptions);
 
     return {
       contents: list,

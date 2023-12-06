@@ -22,9 +22,10 @@ class ClassController {
 
   async getAllClass(req: AuthenticatedRequest, res: Response) {
     try {
-      const {page = 0, limit = 10, schoolId} = req.query;
+      const {page = 0, limit = 10, schoolId, q} = req.query;
       const data = await this.classService.findAllClass(+page, +limit, {
-        schoolId: schoolId ? +schoolId : undefined
+        schoolId: schoolId ? +schoolId : undefined,
+        q: q ? q : undefined
       })
       return res.status(200).json({
         message: "Get all class success",

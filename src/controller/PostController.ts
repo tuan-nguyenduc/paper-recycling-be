@@ -53,6 +53,7 @@ export default class PostController {
     async getAllPost(req: Request, res: Response) {
         try {
             const params = req.query;
+            // console.log(params)
             const posts = await this.postService.findPostPagination(params);
 
             return res.status(200).json({

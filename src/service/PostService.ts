@@ -3,6 +3,7 @@ import {Like, Repository} from "typeorm";
 import {AppDataSource} from "../data-source";
 import {Pagination} from "../type";
 import {CampaignStatus} from "../enum";
+import {query} from "express";
 
 class PostService {
     private readonly postRepository: Repository<Post>
@@ -31,10 +32,10 @@ class PostService {
             limit = 10,
             schoolId,
             status,
-            q = "",
+            q,
         } = params;
 
-        const baseQueryOptions: any = {
+        let baseQueryOptions: any = {
             where: [
                 {status: CampaignStatus.COMPLETED},
                 {status: CampaignStatus.CANCELLED},
@@ -60,9 +61,10 @@ class PostService {
             }
         }
         if (q) {
-            baseQueryOptions.where.push({
+            baseQueryOptions.where = baseQueryOptions.where.map(query => ({
+                ...query,
                 name: Like(`%${q}%`)
-            })
+            }))
         }
 
         const list = await this.postRepository.find(baseQueryOptions);
