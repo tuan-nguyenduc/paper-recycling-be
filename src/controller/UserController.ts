@@ -62,7 +62,6 @@ class UserController {
       if (phone) inDbUser.phone = phone;
       if (email) inDbUser.email = email;
       if (name) inDbUser.name = name;
-
       if (avatar) inDbUser.avatar = avatar;
       const updatedUser = await this.userService.updateUser(inDbUser);
       return res.status(200).json({
