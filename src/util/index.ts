@@ -7,8 +7,8 @@ import materialCollectHistory from "../entity/MaterialCollectHistory";
 
 export const validateImage = (file: any) => {
   // Array of allowed files
-  const array_of_allowed_files = ['png', 'jpeg', 'jpg', 'gif'];
-  const array_of_allowed_file_types = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+  const array_of_allowed_files = ['png', 'jpeg', 'jpg', 'gif', 'JPG'];
+  const array_of_allowed_file_types = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/JPG'];
   // Allowed file size in mb
   const allowed_file_size = 5;
   // Get the extension of the uploaded file

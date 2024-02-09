@@ -22,3 +22,12 @@ export const MINIO_ACCESS_KEY = process.env.MINIO_ACCESS_KEY
 export const MINIO_PRIVATE_KEY = process.env.MINIO_PRIVATE_KEY
 
 export const MINIO_BUCKET_NAME = process.env.MINIO_BUCKET_NAME
+
+export const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME
+
+export const S3_REGION = process.env.S3_REGION
+
+export const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY
+
+export const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY
+

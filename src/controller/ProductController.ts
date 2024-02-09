@@ -4,16 +4,17 @@ import {Request, Response} from "express";
 import {Product} from "../entity/Product";
 import {CategoryService} from "../service/CategoryService";
 import MinioService from "../service/MinioService";
+import S3Service from "../service/S3Service";
 
 export default class ProductController {
   private readonly productService: ProductService;
   private readonly categoryService: CategoryService;
-  private readonly minioService: MinioService;
+  private readonly s3Service: S3Service;
 
   constructor() {
     this.productService = new ProductService();
     this.categoryService = new CategoryService();
-    this.minioService = new MinioService();
+    this.s3Service = new S3Service();
   }
 
   async createProduct(req: AuthenticatedRequest, res: Response) {

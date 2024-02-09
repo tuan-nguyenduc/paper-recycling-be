@@ -4,12 +4,14 @@ import MinioService from "../service/MinioService";
 import uploadFileMiddleware from "../middleware/upload";
 import {validateImage} from "../util";
 import * as fs from "fs";
+import {S3Client} from "@aws-sdk/client-s3";
+import S3Service from "../service/S3Service";
 
 class UploadController {
-  private readonly minioService: MinioService
+  private readonly s3Client: S3Service
 
   constructor() {
-    this.minioService = new MinioService();
+    this.s3Client = new S3Service();
   }
 
   async uploadFile(req: AuthenticatedRequest, res: Response) {
@@ -17,7 +19,8 @@ class UploadController {
       await uploadFileMiddleware(req, res);
       const file = req.file;
       validateImage(file);
-      const url = await this.minioService.putObject(file);
+      const url = await this.s3Client.putObject(file);
+      console.log(url)
       //remove file in server
       fs.unlinkSync(file.path);
       return res.status(200).json({
