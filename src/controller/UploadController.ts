@@ -1,6 +1,6 @@
 import {AuthenticatedRequest} from "../type";
 import {Response} from "express";
-import MinioService from "../service/MinioService";
+// import MinioService from "../service/MinioService";
 import uploadFileMiddleware from "../middleware/upload";
 import {validateImage} from "../util";
 import * as fs from "fs";

@@ -4,8 +4,8 @@ import * as cors from "cors"
 import apiRoute from "./route/api";
 import 'dotenv/config';
 import "reflect-metadata"
-import * as Minio from "minio";
-import MinioService from "./service/MinioService";
+// import * as Minio from "minio";
+// import MinioService from "./service/MinioService";
 //connect db
 AppDataSource.initialize()
   .then(() => {
@@ -36,7 +36,7 @@ app.listen(process.env.PORT || 3000, function () {
   console.log("Example app listening on: " + "http://localhost:" + process.env.PORT || 3000);
 });
 
-const minioService = new MinioService();
+// const minioService = new MinioService();
 // minioService.getPresignedUrl("test3.jpg").then((url) => {
 //   console.log(url)
 // }).catch(console.log)

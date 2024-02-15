@@ -3,7 +3,7 @@ import {AuthenticatedRequest} from "../type";
 import {Request, Response} from "express";
 import {Product} from "../entity/Product";
 import {CategoryService} from "../service/CategoryService";
-import MinioService from "../service/MinioService";
+// import MinioService from "../service/MinioService";
 import S3Service from "../service/S3Service";
 
 export default class ProductController {
