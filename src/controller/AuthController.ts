@@ -17,7 +17,7 @@ class AuthController {
       const {name, email, password, studentId} = req.body
       if (!name || !email || !password || !studentId) {
         return res.status(400).json({
-          message: 'Please fill all fields now!'
+          message: 'Please fill all fields now123!'
         })
       }
       const existStudentId = await this.userService.findByStudentId(studentId);
